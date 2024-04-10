@@ -1,3 +1,10 @@
+# dataset
+dataset/
+
+# Test
+Test/
+Test.csv
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
