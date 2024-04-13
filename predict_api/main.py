@@ -11,6 +11,10 @@ BASE_DIR = pathlib.Path(__file__).parent
 
 app = FastAPI()
 
+@app.get('/')
+def home():
+    return {'BASE_DIR': BASE_DIR}
+
 
 @app.post('/predict')
 async def predict(img_file:UploadFile = File(...)):
@@ -25,7 +29,7 @@ async def predict(img_file:UploadFile = File(...)):
 
     # load the model
     try:
-        model = load_model('traffic_classifier.h5')
+        model = load_model(BASE_DIR.parent / 'traffic_classifier.h5')
     except:
         raise HTTPException(detail="Invalid model", status_code=400)
 
