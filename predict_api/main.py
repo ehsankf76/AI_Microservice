@@ -7,9 +7,15 @@ import io
 import pathlib
 from .functions import *
 
+
+accepted_extensions = ('.png', '.jpg', '.jpeg')
+
+
 BASE_DIR = pathlib.Path(__file__).parent
 
+
 app = FastAPI()
+
 
 @app.get('/')
 def home():
@@ -18,11 +24,14 @@ def home():
 
 @app.post('/predict')
 async def predict(img_file:UploadFile = File(...)):
+    if not img_file.filename.endswith(accepted_extensions):
+        raise HTTPException(detail='Ivalid file type, please upload an image file.', status_code=400)
+
     bytes_str = io.BytesIO(await img_file.read())
     try:
         img = Image.open(bytes_str)
     except:
-        raise HTTPException(detail="Invalid image", status_code=400)
+        raise HTTPException(detail='Invalid image', status_code=400)
 
     # load and preprocess the image
     img = np.array([img.resize((30,30))])
@@ -31,7 +40,7 @@ async def predict(img_file:UploadFile = File(...)):
     try:
         model = load_model(BASE_DIR.parent / 'traffic_classifier.h5')
     except:
-        raise HTTPException(detail="Invalid model", status_code=400)
+        raise HTTPException(detail='Invalid model', status_code=400)
 
     # prediction
     prediction = model.predict(img)
