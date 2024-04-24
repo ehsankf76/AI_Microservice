@@ -1,6 +1,6 @@
 import io
 from fastapi.testclient import TestClient
-from predict_api.main import app, BASE_DIR, accepted_extensions
+from Traffic_Sign_Recognition_api.main import app, BASE_DIR, accepted_extensions
 from PIL import Image
 
 client = TestClient(app)
