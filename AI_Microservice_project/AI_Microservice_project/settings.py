@@ -66,9 +66,9 @@ WSGI_APPLICATION = 'AI_Microservice_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('BASE_DIR', 'ai_microservice_db'),
-        'USER': 'postgres',
-        'PASSWORD': '1234',
+        'NAME': 'ai_microservice_db',
+        'USER': 'ai_microservice_admin',
+        'PASSWORD': 'ai_microservice_password',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -76,13 +76,14 @@ DATABASES = {
 
 try:
     conn = psycopg2.connect(
-        host="localhost",
-        user="postgres",
-        password="1234"
+        host=DATABASES['default']['HOST'],
+        user='postgres',
+        password='1234'
     )
     conn.autocommit = True
     cur = conn.cursor()
-    cur.execute(f"CREATE DATABASE {DATABASES['default']['NAME']}")
+    cur.execute(f"CREATE DATABASE {DATABASES['default']['NAME']} WITH OWNER {DATABASES['default']['USER']}")
+
 except psycopg2.errors.DuplicateDatabase:
     pass
 
