@@ -1,6 +1,7 @@
 from pathlib import Path
 import os
 import psycopg2
+from . import database_config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -66,19 +67,19 @@ WSGI_APPLICATION = 'AI_Microservice_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ai_microservice_db',
-        'USER': 'ai_microservice_admin',
-        'PASSWORD': 'ai_microservice_password',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': database_config.DATABASE_CONFIG['NAME'],
+        'USER': database_config.DATABASE_CONFIG['USER'],
+        'PASSWORD': database_config.DATABASE_CONFIG['PASSWORD'],
+        'HOST': database_config.DATABASE_CONFIG['HOST'],
+        'PORT': database_config.DATABASE_CONFIG['PORT'],
     }
 }
 
 try:
     conn = psycopg2.connect(
         host=DATABASES['default']['HOST'],
-        user='postgres',
-        password='1234'
+        user=database_config.DATABASE_CONFIG['ADMIN'],
+        password=database_config.DATABASE_CONFIG['ADMIN_PASS']
     )
     conn.autocommit = True
     cur = conn.cursor()
